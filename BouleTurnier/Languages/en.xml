@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CSIT for="1.*" name="English">
+  <!-- Remember. For menu items the character following the underscore (_) character will be set as the menu accelerator key. -->
+  <TeamManager>
+    <Label_SelectedPlayer Header="Selected Player:" />
+    <Button_CreateTeam Header="Create Team" />
+    <Button_UpdateTeam Header="Update Team" />
+    <Label_SelectedTeam Header="Number:" />
+    <MenuHelp Header="_Help" />
+    <MenuAbout Header="_About..." />
+  </TeamManager>
+</CSIT>
