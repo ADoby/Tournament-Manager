@@ -46,6 +46,8 @@ namespace BouleTurnier.Source
             FileName = String.Format("{0}/{1}", ExportFolder, FileName);
             StreamWriter stream = new StreamWriter(FileName);
 
+            stream.WriteLine(Team.ExportHeader());
+
             for (int i = 0; i < teamManager.Teams.Count; i++)
             {
                 stream.WriteLine(teamManager.Teams[i].ExportInfo());

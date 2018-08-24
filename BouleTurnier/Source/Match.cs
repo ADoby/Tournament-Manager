@@ -10,6 +10,8 @@ namespace BouleTurnier.Source
     public class Match
     {
         MainWindow mainWindow;
+        private int _team1Points;
+        private int _team2Points;
 
         public Match(MainWindow newOwner)
         {
@@ -41,7 +43,15 @@ namespace BouleTurnier.Source
                 return Team1.Description;
             }
         }
-        public int Team1Points { get; set; }
+        public int Team1Points
+        {
+            get => _team1Points;
+            set
+            {
+                _team1Points = value;
+                mainWindow?.SaveSelectedTournament();
+            }
+        }
 
         public Team Team2 { get; set; }
         public int Team2Number
@@ -58,7 +68,16 @@ namespace BouleTurnier.Source
                 return Team2.Description;
             }
         }
-        public int Team2Points { get; set; }
+
+        public int Team2Points
+        {
+            get => _team2Points;
+            set
+            {
+                _team2Points = value;
+                mainWindow?.SaveSelectedTournament();
+            }
+        }
 
         public bool CompareMatch(Team team1, Team team2)
         {
@@ -75,25 +94,22 @@ namespace BouleTurnier.Source
             return false;
         }
 
+        public Team TeamThatWon
+        {
+            get
+            {
+                if (Team1Points > Team2Points)
+                    return Team1;
+                else if (Team2Points > Team1Points)
+                    return Team2;
+                return null;
+            }
+        }
+
         public void CalculatePoints(int PointsPerWin)
         {
-
             Team1.AddPoints(Team1Points - Team2Points);
             Team2.AddPoints(Team2Points - Team1Points);
-
-            Team1.SmallPoints += (Team1Points - Team2Points);
-            Team2.SmallPoints += (Team2Points - Team1Points);
-
-            if (Team1Points > Team2Points)
-            {
-                Team1.Wins++;
-                Team1.AddPoints(PointsPerWin);
-            }
-            if (Team2Points > Team1Points)
-            {
-                Team2.Wins++;
-                Team2.AddPoints(PointsPerWin);
-            }
         }
 
         public void UpdatePlayerConnection()
@@ -113,7 +129,7 @@ namespace BouleTurnier.Source
             {
                 if (Team1 != null)
                     Team1.UpdatePlayerConnections(mainWindow);
-            } 
+            }
             temp = mainWindow.teamManager.FindTeam(Team2);
             if (temp != null)
             {

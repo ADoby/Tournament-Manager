@@ -67,6 +67,12 @@ namespace BouleTurnier.Source
 
         [field: NonSerialized]
         private Team currentTeam = null;
+
+        public void ResetPoints()
+        {
+            Points = 0;
+        }
+
         public Team CurrentTeam
         {
             get

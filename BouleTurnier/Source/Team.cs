@@ -46,20 +46,6 @@ namespace BouleTurnier.Source
             }
         }
 
-        private int points = 0;
-        public int Points
-        {
-            get
-            {
-                return points;
-            }
-            set
-            {
-                points = value;
-                TriggerPropertyChanges("Points");
-            }
-        }
-
         private int wins = 0;
         public int Wins
         {
@@ -74,17 +60,39 @@ namespace BouleTurnier.Source
             }
         }
 
-        private int smallPoints = 0;
-        public int SmallPoints
+        public void ResetPoints()
+        {
+            Points = 0;
+            Wins = 0;
+            NegativePoints = 0;
+            PositivePoints = 0;
+        }
+
+        private int points = 0;
+        public int Points
         {
             get
             {
-                return smallPoints;
+                return points;
             }
             set
             {
-                smallPoints = value;
-                TriggerPropertyChanges("SmallPoints");
+                points = value;
+                TriggerPropertyChanges("Points");
+            }
+        }
+
+        private int negativePoints = 0;
+        public int NegativePoints
+        {
+            get
+            {
+                return negativePoints;
+            }
+            set
+            {
+                negativePoints = value;
+                TriggerPropertyChanges("NegativePoints");
             }
         }
 
@@ -174,6 +182,8 @@ namespace BouleTurnier.Source
 
             return Players[index];
         }
+
+
         public void ReplacePlayers(params Player[] newPlayers)
         {
             Players.Clear();
@@ -202,14 +212,35 @@ namespace BouleTurnier.Source
         public void AddPoints(int value)
         {
             Points += value;
+
+            if (value > 0)
+                Wins++;
+            if (value > 0)
+                PositivePoints += value;
+            else if (value < 0)
+                NegativePoints += value;
+
             for (int i = 0; i < Players.Count; i++)
             {
                 Players[i].Points += value;
             }
 
-            if (value > 0)
-                PositivePoints += value;
         }
+        public static Comparison<Team> PointsComparer()
+        {
+            return (x, y) =>
+            {
+                var value = x.Wins.CompareTo(y.Wins);
+                if (value == 0)
+                    value = x.Points.CompareTo(y.Points);
+                if (value == 0)
+                    value = x.PositivePoints.CompareTo(y.PositivePoints);
+                if (value == 0)
+                    value = x.NegativePoints.CompareTo(y.NegativePoints);
+                return value;
+            };
+        }
+        
 
         public bool EqualsTeam(Team otherTeam)
         {
@@ -257,9 +288,14 @@ namespace BouleTurnier.Source
             return false;
         }
 
+        public static string ExportHeader()
+        {
+            return "Number;Description;Wins;Points;PositivePoints;NegativePoints";
+        }
+
         public string ExportInfo()
         {
-            return String.Format("{0};{1};{2};{3}", Number, Description, Wins, SmallPoints);
+            return String.Format("{0};{1};{2};{3};{4};{5}", Number, Description, Wins, Points, PositivePoints, NegativePoints);
         }
 
         public void UpdatePlayerConnections(MainWindow mainWindow)

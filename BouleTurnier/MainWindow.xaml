@@ -174,13 +174,25 @@
                                         <ColumnDefinition Width="5" />
                                         <ColumnDefinition Width="*" />
                                         <ColumnDefinition Width="5" />
-                                        <ColumnDefinition Width="40" />
+                                        <ColumnDefinition Width="20" />
+                                        <ColumnDefinition Width="5" />
+                                        <ColumnDefinition Width="20" />
+                                        <ColumnDefinition Width="5" />
+                                        <ColumnDefinition Width="20" />
+                                        <ColumnDefinition Width="5" />
+                                        <ColumnDefinition Width="20" />
                                     </Grid.ColumnDefinitions>
                                     <TextBlock Grid.Column="0" Text="{Binding Number}" />
                                     <TextBlock Grid.Column="1" Text=":" />
                                     <TextBlock Grid.Column="2" Text="{Binding Description}" />
                                     <TextBlock Grid.Column="3" Text=":" />
-                                    <TextBlock Grid.Column="4" Text="{Binding Points}" />
+                                    <TextBlock Grid.Column="4" Text="{Binding Wins}" />
+                                    <TextBlock Grid.Column="5" Text=":" />
+                                    <TextBlock Grid.Column="6" Text="{Binding Points}" />
+                                    <TextBlock Grid.Column="7" Text=":" />
+                                    <TextBlock Grid.Column="8" Text="{Binding PositivePoints}" />
+                                    <TextBlock Grid.Column="9" Text=":" />
+                                    <TextBlock Grid.Column="10" Text="{Binding NegativePoints}" />
                                 </Grid>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
@@ -206,31 +218,32 @@
                         <RowDefinition Height="38" />
                     </Grid.RowDefinitions>
                     <ComboBox x:Name="cbRounds" Margin="10,10,326,0" VerticalAlignment="Top" SelectionChanged="cbRounds_SelectionChanged" Height="25" VerticalContentAlignment="Center" />
-                    <Button Content="Calculate points" HorizontalAlignment="Left" Margin="10,0,0,10" VerticalAlignment="Bottom" Width="169" Click="Button_Click_1" Grid.Row="2" Height="25" />
-                    <Button Content="Export selected Round" Margin="184,0,0,10" VerticalAlignment="Bottom" Click="Button_Click_5" Grid.Row="2" Height="25" HorizontalAlignment="Left" Width="123" />
-                    <Button Content="ToggleSettings" Margin="10,10,9,0" VerticalAlignment="Top" Click="Button_Click_3" Grid.Column="1" Height="25" />
+                    <Button Content="Calculate points" HorizontalAlignment="Left" Margin="11,0,0,12" VerticalAlignment="Bottom" Width="169" Click="Button_Click_1" Grid.Row="2" Height="25" />
+                    <Button Content="Export selected Round" Margin="185,0,0,12" VerticalAlignment="Bottom" Click="Button_Click_5" Grid.Row="2" Height="25" HorizontalAlignment="Left" Width="123" />
+                    <Button Content="New Round" Margin="10,10,9,0" VerticalAlignment="Top" Click="Button_Click_3" Grid.Column="1" Height="25" />
                     <Grid Height="95" Margin="10,40,10,0" VerticalAlignment="Top" Background="#FFE0E0E0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="222*" />
                             <ColumnDefinition Width="241*" />
                             <ColumnDefinition Width="173*" />
                         </Grid.ColumnDefinitions>
-                        <RadioButton x:Name="rbRandomMatchesFromGlobalTeams" Content="Random matches from global teams" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" IsChecked="True" Height="16" Width="204" />
-                        <CheckBox x:Name="cbSameMatches" Content="Allow same matches again" HorizontalAlignment="Left" Margin="10,34,0,0" VerticalAlignment="Top" Height="16" Width="157" />
-                        <CheckBox x:Name="cbSameTeams" IsEnabled="{Binding ElementName=rbRandomMatchesWithRandomTeams, Path=IsChecked}" Content="Allow same teams again" HorizontalAlignment="Left" Margin="9,34,0,0" VerticalAlignment="Top" Grid.Column="1" Height="16" Width="145" />
-                        <RadioButton x:Name="rbRandomMatchesWithRandomTeams" Content="Random matches from random teams" HorizontalAlignment="Left" Margin="9,10,0,0" VerticalAlignment="Top" Grid.Column="1" Height="16" Width="219" />
-                        <TextBox x:Name="txtWantedTeamSize" PreviewTextInput="txtWantedTeamSize_PreviewTextInput" IsEnabled="{Binding ElementName=rbRandomMatchesWithRandomTeams, Path=IsChecked}" Height="23" Margin="121,57,12,0" TextWrapping="Wrap" Text="2" VerticalAlignment="Top" Grid.Column="1" />
-                        <Label Content="Wanted team size:" IsEnabled="{Binding ElementName=rbRandomMatchesWithRandomTeams, Path=IsChecked}" HorizontalAlignment="Left" Margin="9,55,0,0" VerticalAlignment="Top" Grid.Column="1" Height="26" Width="107" />
-                        <CheckBox x:Name="cbAllowFreeWin" Content="Allow free win" HorizontalAlignment="Left" Margin="13,23,0,0" VerticalAlignment="Top" Height="16" Width="92" Grid.Column="2" IsChecked="True" />
+                        <RadioButton x:Name="rbRandomMatchesFromGlobalTeams" Content="Random Matches" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" IsChecked="True" Height="16" Width="204" />
+                        <CheckBox x:Name="cbSameMatches" Content="Allow same matches again" HorizontalAlignment="Left" Margin="10,34,0,0" VerticalAlignment="Top" Height="16" Width="203" />
+                        <CheckBox x:Name="cbSameTeams" IsEnabled="{Binding ElementName=rbRandomMatchesWithRandomTeams, Path=IsChecked}" Content="Allow same teams again" HorizontalAlignment="Left" Margin="9,34,0,0" VerticalAlignment="Top" Grid.Column="1" Height="16" Width="145" Opacity="0.01" />
+                        <RadioButton x:Name="rbRandomMatchesWithRandomTeams" Content="Random matches from random teams" HorizontalAlignment="Left" Margin="9,10,0,0" VerticalAlignment="Top" Grid.Column="1" Height="16" Width="219" Opacity="0.01" />
+                        <TextBox x:Name="txtWantedTeamSize" PreviewTextInput="txtWantedTeamSize_PreviewTextInput" IsEnabled="{Binding ElementName=rbRandomMatchesWithRandomTeams, Path=IsChecked}" Height="23" Margin="121,57,12,0" TextWrapping="Wrap" Text="2" VerticalAlignment="Top" Grid.Column="1" Opacity="0.01" />
+                        <Label Content="Wanted team size:" IsEnabled="{Binding ElementName=rbRandomMatchesWithRandomTeams, Path=IsChecked}" HorizontalAlignment="Left" Margin="9,55,0,0" VerticalAlignment="Top" Grid.Column="1" Height="26" Width="107" Opacity="0.01" />
+                        <CheckBox x:Name="cbAllowFreeWin" Content="Allow free win" HorizontalAlignment="Left" Margin="13,23,0,0" VerticalAlignment="Top" Height="16" Width="150" Grid.Column="2" IsChecked="True" />
                         <Label Content="Points for free win:" HorizontalAlignment="Left" Margin="10,39,0,0" VerticalAlignment="Top" Height="26" Width="109" Grid.Column="2" />
                         <TextBox x:Name="txtFreePoints" PreviewTextInput="txtFreePoints_PreviewTextInput" HorizontalAlignment="Left" Height="23" Margin="124,41,0,0" TextWrapping="Wrap" Text="7" VerticalAlignment="Top" Width="39" Grid.Column="2" />
-                        <Label Content="Points for a win:" Grid.Column="2" HorizontalAlignment="Left" Margin="10,68,0,0" VerticalAlignment="Top" Height="26" Width="95" />
-                        <TextBox x:Name="txtPointsForWin" PreviewTextInput="txtPointsForWin_PreviewTextInput" Grid.Column="2" HorizontalAlignment="Left" Height="23" Margin="110,70,0,0" TextWrapping="Wrap" Text="10000" VerticalAlignment="Top" Width="53" />
-                        <RadioButton x:Name="rbFinalRound" Content="Final" Margin="10,69,55,0" VerticalAlignment="Top" IsChecked="True" Height="16" />
-                        <TextBox x:Name="txtFinalTeams" PreviewTextInput="txtFreePoints_PreviewTextInput" Margin="173,62,10,0" TextWrapping="Wrap" Text="8" RenderTransformOrigin="-10.923,1.435" Height="23" VerticalAlignment="Top" />
+                        <Label Content="Points for a win:" Grid.Column="2" HorizontalAlignment="Left" Margin="10,68,0,0" VerticalAlignment="Top" Height="26" Width="95" Opacity="0.01" />
+                        <TextBox x:Name="txtPointsForWin" PreviewTextInput="txtPointsForWin_PreviewTextInput" Grid.Column="2" HorizontalAlignment="Left" Height="23" Margin="110,70,0,0" TextWrapping="Wrap" Text="10000" VerticalAlignment="Top" Width="53" Opacity="0.01" />
+                        <RadioButton x:Name="rbFinalRound" Content="Final" Margin="10,69,151,0" VerticalAlignment="Top" IsChecked="True" Height="16" />
+                        <TextBox x:Name="txtFinalTeams" PreviewTextInput="txtFreePoints_PreviewTextInput" Margin="168,66,15,0" TextWrapping="Wrap" Text="8" RenderTransformOrigin="-10.923,1.435" Height="23" VerticalAlignment="Top" />
+                        <Label Content="Max Teams:" HorizontalAlignment="Left" Margin="77,63,0,0" VerticalAlignment="Top" Height="26" Width="91" />
                     </Grid>
-                    <Button x:Name="btnToggleRoundTeams" Content="ToggleTeams" Margin="10,0,10,10" Grid.Row="2" Grid.Column="1" Click="btnToggleRoundTeams_Click" Height="25" VerticalAlignment="Bottom" />
-                    <Grid Margin="10,10,10,2" Grid.Row="1" Grid.ColumnSpan="2" Background="#FFBFBFBF">
+                    <Button x:Name="btnToggleRoundTeams" Content="ToggleTeams" Margin="11,0,9,12" Grid.Row="2" Grid.Column="1" Click="btnToggleRoundTeams_Click" Height="25" VerticalAlignment="Bottom" />
+                    <Grid Margin="10" Grid.Row="1" Grid.ColumnSpan="2" Background="#FFBFBFBF" Grid.RowSpan="2">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="32" />
                             <RowDefinition />
@@ -298,13 +311,7 @@
                     <TextBox x:Name="txtRoundName" HorizontalAlignment="Left" Height="23" Margin="10,71,0,0" TextWrapping="Wrap" Text="Round 1" VerticalAlignment="Top" Width="123" Grid.Column="1" />
                     <Label Content="Round Name:" Grid.Column="1" HorizontalAlignment="Left" Margin="10,40,0,0" VerticalAlignment="Top" Width="123" />
                     <Button x:Name="btnDeleteRound" Content="Delete Round" Margin="0,10,10,0" VerticalAlignment="Top" Height="25" HorizontalAlignment="Right" Width="96" Click="btnDeleteRound_Click" />
-                    <Button x:Name="btnRenameRound" Content="Rename" Margin="0,10,111,0" VerticalAlignment="Top" Height="25" Click="Button_Click_7" HorizontalAlignment="Right" Width="83" />
-                    <TextBox x:Name="txtNewRoundName" Height="25" Margin="0,10,199,0" TextWrapping="Wrap" Text="NewName" VerticalAlignment="Top" HorizontalAlignment="Right" Width="122" />
-                    <Button Content="Add Party" Margin="521,0,0,9.6" VerticalAlignment="Bottom"  Grid.Row="2" Height="25" HorizontalAlignment="Left" Width="123" Click="Button_Click_11" />
-                    <TextBox x:Name="txtTeam1" PreviewTextInput="txtFreePoints_PreviewTextInput" HorizontalAlignment="Left" Height="23" Margin="477,5.8,0,0" TextWrapping="Wrap" Text="7" VerticalAlignment="Top" Width="39" Grid.Row="2" />
-                    <TextBox x:Name="txtTeam2" PreviewTextInput="txtFreePoints_PreviewTextInput" HorizontalAlignment="Left" Height="23" Margin="433,6.8,0,0" TextWrapping="Wrap" Text="7" VerticalAlignment="Top" Width="39" Grid.Row="2" />
-                    <Button Content="Delete" Margin="383,0,0,10.6" VerticalAlignment="Bottom"  Grid.Row="2" Height="25" HorizontalAlignment="Left" Width="45" Click="Button_Click_12" />
-                    <Button Content="Delete" Margin="333,0,0,9.6" VerticalAlignment="Bottom"  Grid.Row="2" Height="25" HorizontalAlignment="Left" Width="45" Click="Button_Click_13"  />
+                    <TextBox x:Name="txtNewRoundName" Height="25" Margin="0,10,111,0" TextWrapping="Wrap" Text="NewName" VerticalAlignment="Top" HorizontalAlignment="Right" Width="210" TextChanged="txtNewRoundName_TextChanged" />
                 </Grid>
             </TabItem>
         </TabControl>

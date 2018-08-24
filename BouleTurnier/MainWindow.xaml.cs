@@ -335,12 +335,16 @@ namespace BouleTurnier
         {
             tournament.teamManager.AddNewTeam();
             listTeams.SelectedIndex = listTeams.Items.Count - 1;
+            this.SaveSelectedTournament();
         }
 
         private void txtTeamDescription_TextChanged(object sender, TextChangedEventArgs e)
         {
             if (windowManager.SelectedTeam != null)
+            {
                 windowManager.SelectedTeam.Description = txtTeamDescription.Text;
+                this.SaveSelectedTournament();
+            }
         }
 
         private void listTeams_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -364,6 +368,7 @@ namespace BouleTurnier
                 teamManager.AddPlayerToTeam(windowManager.SelectedTeam, selectedPlayer);
 
                 listAvaiblePlayers.SelectedIndex = -1;
+                this.SaveSelectedTournament();
             }
         }
 
@@ -376,6 +381,7 @@ namespace BouleTurnier
                 teamManager.RemovePlayerFromTeam(windowManager.SelectedTeam, selectedPlayer);
 
                 listAvaiblePlayers.SelectedIndex = -1;
+                this.SaveSelectedTournament();
             }
         }
 
@@ -431,6 +437,7 @@ namespace BouleTurnier
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
             tournamentManager.CalculatePoints();
+            this.SaveSelectedTournament();
         }
 
         private void cbRounds_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -481,6 +488,7 @@ namespace BouleTurnier
                 }
                 AddFinalRound(wantedTeamSize);
             }
+            this.SaveSelectedTournament();
         }
 
         public void AddAndRandomizeRound()
@@ -522,6 +530,7 @@ namespace BouleTurnier
         public void AddFinalRound(int finalTeams)
         {
             Round currentRound = tournamentManager.AddRound();
+            currentRound.IsFinal = true;
             bool allowFreeWin = cbAllowFreeWin.IsChecked == true;
 
             int wantedTeamSize = int.Parse(txtWantedTeamSize.Text);
@@ -582,58 +591,7 @@ namespace BouleTurnier
             CSVExport exporter = new CSVExport();
             exporter.ExportRound(tournamentManager.Rounds[cbRounds.SelectedIndex], tournamentManager.Rounds[cbRounds.SelectedIndex].Name);
         }
-
-        private void AddMatch()
-        {
-            Round round = tournamentManager.Rounds[cbRounds.SelectedIndex];
-            Team team1 = null;
-            Team team2 = null;
-
-            int team1Number = int.Parse(txtTeam1.Text);
-            int team2Number = int.Parse(txtTeam2.Text);
-
-            foreach (var team in teamManager.Teams)
-            {
-                if (team.Number == team1Number)
-                    team1 = team;
-                else if (team.Number == team2Number)
-                    team2 = team;
-            }
-
-            if (team1 == null || team2 == null)
-                return;
-            round.AddMatch(team1, team2);
-        }
-
-        private void RemoveMatch()
-        {
-            Round round = tournamentManager.Rounds[cbRounds.SelectedIndex];
-            Team team1 = null;
-            Team team2 = null;
-
-            int team1Number = int.Parse(txtTeam1.Text);
-            int team2Number = int.Parse(txtTeam2.Text);
-
-            foreach (var team in teamManager.Teams)
-            {
-                if (team.Number == team1Number)
-                    team1 = team;
-                else if (team.Number == team2Number)
-                    team2 = team;
-            }
-
-            if (team1 == null || team2 == null)
-                return;
-            for (int i = 0; i < round.Matches.Count; i++)
-            {
-                if (round.Matches[i].CompareMatch(team1, team2))
-                {
-                    round.Matches.RemoveAt(i);
-                    break;
-                }
-            }
-        }
-
+        
         private void Button_Click_6(object sender, RoutedEventArgs e)
         {
             AddSaveInfo();
@@ -670,7 +628,16 @@ namespace BouleTurnier
             if (cbSaveInfo.SelectedIndex == -1)
                 return;
 
+            tournamentManager.CalculatePoints();
+
             saveManager.SaveTournament(tournament, cbSaveInfo.SelectedIndex);
+
+            CSVExport exporter = new CSVExport();
+            foreach (var round in tournamentManager.Rounds)
+            {
+                exporter.ExportRound(round, round.Name);
+            }
+            exporter.ExportTeams(teamManager, "Teams");
         }
 
         public void LoadTournament(int infoIndex)
@@ -812,15 +779,7 @@ namespace BouleTurnier
 
             cbRounds.SelectedIndex = cbRounds.Items.Count - 1;
         }
-
-        private void Button_Click_7(object sender, RoutedEventArgs e)
-        {
-            if (cbRounds.SelectedItem == null)
-                return;
-
-            tournamentManager.Rounds[cbRounds.SelectedIndex].Name = txtNewRoundName.Text;
-            ((ComboBoxItem)cbRounds.SelectedItem).Content = txtNewRoundName.Text;
-        }
+        
 
         private void Button_Click_8(object sender, RoutedEventArgs e)
         {
@@ -850,21 +809,21 @@ namespace BouleTurnier
         {
             ReloadErrorInfo();
         }
-
-        private void Button_Click_11(object sender, RoutedEventArgs e)
-        {
-            AddMatch();
-        }
-
-        private void Button_Click_12(object sender, RoutedEventArgs e)
-        {
-            RemoveMatch();
-        }
+        
 
         private void Button_Click_13(object sender, RoutedEventArgs e)
         {
             Round round = tournamentManager.Rounds[cbRounds.SelectedIndex];
             round.Matches.Clear();
+        }
+
+        private void txtNewRoundName_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (cbRounds.SelectedItem == null)
+                return;
+
+            tournamentManager.Rounds[cbRounds.SelectedIndex].Name = txtNewRoundName.Text;
+            ((ComboBoxItem)cbRounds.SelectedItem).Content = txtNewRoundName.Text;
         }
     }
 }

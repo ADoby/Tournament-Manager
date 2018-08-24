@@ -60,11 +60,11 @@ namespace BouleTurnier.Source
 		{
 			for (int i = 0; i < mainWindow.tournament.teamManager.Teams.Count; i++)
 			{
-				mainWindow.tournament.teamManager.Teams[i].Points = 0;
+				mainWindow.tournament.teamManager.Teams[i].ResetPoints();
 			}
 			for (int i = 0; i < mainWindow.tournament.playerManager.Players.Count; i++)
 			{
-				mainWindow.tournament.playerManager.Players[i].Points = 0;
+				mainWindow.tournament.playerManager.Players[i].ResetPoints();
 			}
 			for (int i = 0; i < Rounds.Count; i++)
 			{

@@ -68,15 +68,17 @@ namespace BouleTurnier.Source
             }
         }
 
+        
+
         public void SortByPoints(bool ascend = true)
         {
             if (ascend)
             {
-                Teams.Sort((x, y) => x.Points.CompareTo(y.Points));
+                Teams.Sort(Team.PointsComparer());
             }
             else
             {
-                Teams.DescendingSort((x, y) => x.Points.CompareTo(y.Points));
+                Teams.DescendingSort(Team.PointsComparer());
             }
         }
 

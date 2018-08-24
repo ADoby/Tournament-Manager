@@ -31,6 +31,8 @@ namespace BouleTurnier.Source
 
 		public bool AllowSameMatches = false;
 
+        public bool IsFinal = false;
+
 		public Round(MainWindow newOwner)
 		{
 			mainWindow = newOwner;
@@ -197,19 +199,35 @@ namespace BouleTurnier.Source
 			int tryCount = 0;
 
 			bool failed = false;
+            
+            var allTeams = new List<Team>();
+            //If there is another final use its teams for our final
+            //else use global teams (we are the first final)
+            var lastFinal = mainWindow.tournamentManager.Rounds.LastOrDefault(m => m.IsFinal && m != this);
 
-			Team[] allTeams = new Team[0];
-			if (GlobalTeams)
-			{
-				allTeams = mainWindow.tournament.teamManager.Teams.ToArray();
-			}
-			List<Team> avaibleTeams = new List<Team>();
+            if (lastFinal != null)
+            {
+                //Only use teams that won the last game
+                allTeams = lastFinal.Teams.Where(team => lastFinal.Matches.Any(match => match.TeamThatWon == team)).ToList();
+            }
+            else
+            {
+                if (GlobalTeams)
+                {
+                    allTeams = mainWindow.tournament.teamManager.Teams.ToList();
+                }
+                else
+                {
+                    //TODO Create random Teams
+                }
+            }
 
-			System.Array.Sort(allTeams, (x, y) => y.Points.CompareTo(x.Points));
-			for (int i = 0; i < WantedTeamSize; i++)
-			{
-				avaibleTeams.Add(allTeams[i]);
-			}
+            //Order descending
+            allTeams.Sort(Team.PointsComparer());
+            allTeams.Reverse();
+
+            var avaibleTeams = allTeams.Take(WantedTeamsInFinal).ToList();
+            
 			int matchCount = avaibleTeams.Count / 2;
 
 			Random random = new Random();
@@ -463,10 +481,7 @@ namespace BouleTurnier.Source
 			{
 				for (int i = 0; i < Teams.Count; i++)
 				{
-					Teams[i].Points = 0;
-					Teams[i].PositivePoints = 0;
-					Teams[i].SmallPoints = 0;
-					Teams[i].Wins = 0;
+                    Teams[i].ResetPoints();
 				}
 			}
 
@@ -557,11 +572,11 @@ namespace BouleTurnier.Source
 		{
 			if (ascend)
 			{
-				Teams.Sort((x, y) => x.Points.CompareTo(y.Points));
+				Teams.Sort(Team.PointsComparer());
 			}
 			else
 			{
-				Teams.DescendingSort((x, y) => x.Points.CompareTo(y.Points));
+				Teams.DescendingSort(Team.PointsComparer());
 			}
 		}
 
